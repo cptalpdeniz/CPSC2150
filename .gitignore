@@ -37,3 +37,4 @@ src/
 googletest-master/
 include/
 *.DS_Store
+.DS_Store
