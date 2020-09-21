@@ -1,4 +1,10 @@
-// Name: 
+/*
+* Assignment 1
+* Author Alp Deniz Senyurt
+* Student ID: 100342433
+* Self explanatory variables and parameters will not be commented as they are, "self-explanatory".
+*/
+
 
 #include "fcts.h"
 #include <string>
