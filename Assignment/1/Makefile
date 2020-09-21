@@ -31,7 +31,7 @@ CPPFLAGS += -I$(GTEST_DIR)/include -DGTEST_HAS_PTHREAD=0
 GTEST_MAIN_CC = $(GTEST_DIR)/gtest_main.cc
 
 # Flags passed to the C++ compiler.
-CXXFLAGS += -pedantic -Wall -Wextra $(VERSION) -g -fsaniteze=address
+CXXFLAGS += -pedantic -Wall -Wextra $(VERSION) 
 
 # All Google Test headers.  Usually you shouldn't change this
 # definition.

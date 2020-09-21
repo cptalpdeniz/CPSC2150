@@ -31,10 +31,10 @@ std::string toFinalStr(unsigned int n, unsigned int reqNumOfChars, unsigned int 
 		if (reqNumOfChars == numOfChars)
 			return "";
 		//Fill the left side with 0s
-		return toFinalStr(n, reqNumOfChars, ++numOfChars++) + "0";
+		return toFinalStr(n, reqNumOfChars, ++numOfChars) + "0";
 	}
 	//Recursively populate the string, char by char
-	return toFinalStr(n >> 1, reqNumOfChars, ++numOfChars++) + (CHECK_BIT(n, 0) ? "1" : "0");
+	return toFinalStr(n >> 1, reqNumOfChars, ++numOfChars) + (CHECK_BIT(n, 0) ? "1" : "0");
 }
 
 std::string toBitsString(unsigned int n)
@@ -45,34 +45,52 @@ std::string toBitsString(unsigned int n)
 //---------------------------------------------------------------------------//
 //Find the minimum positive
 
-int minimumPositiveHelper(const int A[], int l, int num)
-{
-	if (l == 0)
-		return num;
-	if (A[l-1] < num && A[l-1] > 0)
-		num = A[l-1];
-	return minimumPositiveHelper(A, l-1, num);
-}
-
-int minimumPositive(const int A[] , int n)
-{
-	return minimumPositiveHelper(A, n, (A[n] < 0) ? 0 : A[n]);
-}
-
-/*
-
-ASK ABOUT THIS PART TO SEE IF YOU CAN DO IT WITHOUT HELPER FUNCTION
 int minimumPositive(const int A[], int n)
 {
-	if (n == 0)
-		return A[n] < 0 ? 0 : A[n];
-	return ((minimumPositive(A, n-1) < A[n] && A[n-1] > 0) ? A[n-1] : A[n])
+	//set r as 0 or call for next recursion and set the next number
+	int r = (--n < 0) ? 0 : minimumPositive(A, n);
+	/*do ternary to determine to return either:
+	-0 (as there are no positive numbers in the array)
+	-A[n] (is the smallest number up to that point)
+	-r (A[n] is not smaller than the previous number and we need to return r)
+	*/
+	return (A[n] > 0 && (A[n] < r || !r)) ? A[n] : r;
 }
 
+
+//---------------------------------------------------------------------------//
+/*
+do swap in 1 recursive call
+then recurse with n-2 to go on next pair
+stop when there is 0 or 1 element remaining
 */
+void swapPairsRightToLeft (int A[] , int n)
+{
+	if (n <= 1)
+		return;
+	int temp = A[n-2];
+	A[n-2] = A[n-1];
+	A[n-1] = temp;
+	return swapPairsRightToLeft(A, n-2);
+}
 
 //---------------------------------------------------------------------------//
 
-void swapPairsRightToLeft ( int A[ ] , int n ) ;
+//helper function
+bool equalsChar(const std::string& strA, const std::string& strB, unsigned int index, char ch)
+{	
+	//detect which string is longer and compare index
+	if (std::max(strA.length(), strB.length()) < index)
+		return true;
+	//XOR operation to check if they are the same or not (if ch is found at that index)
+	if ((strA[index] == ch) ^ (strB[index] == ch))
+	{
+			return false;
+	}
+	//recursive call with index incremented by one
+	return equalsChar(strA, strB, ++index, ch);
+}
 
-//---------------------------------------------------------------------------//
+bool equalsChar(const std::string& strA , const std::string& strB , char ch) {
+	return equalsChar(strA, strB, 0, ch);
+}
