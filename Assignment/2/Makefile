@@ -1,6 +1,5 @@
 # A Makefile for using Google Test and building a unit test program against it.
 # CPSC 2150 by Gladys Monagan
-# September 9, 2020
 # based on the Google Test distribution sample Makefiles
 #
 # SYNOPSIS:
@@ -38,13 +37,14 @@ CXXFLAGS += -pedantic -Wall -Wextra $(VERSION)
 GTEST_HEADERS = $(GTEST_DIR)/include/gtest/*.h \
                 $(GTEST_DIR)/include/gtest/internal/*.h
 
-SRC = fcts
+# name of file(s) that we are testing e.g. LList.cpp and LList.h
+SRC = LList
 
 # a main program that runs with the Google Tests
-UNITTEST = fcts_unittest
+UNITTEST = LList_unittest
 
 # a main that produces a main executable without Google Tests
-TEST_PROG = test_fcts
+TEST_LLIST = test_LList
 
 # House-keeping build targets.
 all : $(UNITTEST)
@@ -56,12 +56,12 @@ run : all
 	$(UNITTEST).exe
 
 remove :
-	rm -f $(UNITTEST) $(TEST_PROG) *.o
+	rm -f $(UNITTEST) $(TEST_LLIST) *.o
 
 clean :
-	del $(UNITTEST).exe $(TEST_PROG).exe *.o  /Q
+	del $(UNITTEST).exe $(TEST_LLIST).exe *.o  /Q
 
-test : $(TEST_PROG)
+test : $(TEST_LLIST)
 
 # Usually you shouldn't tweak such internal variables, indicated by a
 # trailing _.
@@ -90,9 +90,9 @@ $(UNITTEST).o : $(USER_DIR)/$(UNITTEST).cpp  \
 $(UNITTEST) : $(SRC).o $(UNITTEST).o gtest-all.o gtest_main.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@
 
-$(TEST_PROG).o : $(USER_DIR)/$(TEST_PROG).cpp  \
+$(TEST_LLIST).o : $(USER_DIR)/$(TEST_LLIST).cpp  \
                   $(USER_DIR)/$(SRC).h 
-	$(CXX) $(CXXFLAGS) -c $(USER_DIR)/$(TEST_PROG).cpp
+	$(CXX) $(CXXFLAGS) -c $(USER_DIR)/$(TEST_LLIST).cpp
 
-$(TEST_PROG): $(SRC).o $(TEST_PROG).o
+$(TEST_LLIST): $(SRC).o $(TEST_LLIST).o
 	$(CXX) $(CXXFLAGS) $^ -o $@
