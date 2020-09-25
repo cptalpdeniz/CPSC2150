@@ -11,18 +11,10 @@ static unsigned long long current_millis()
 	return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
 }
 
-// operations
-/*
-	1000
-	2000
-	4000
-	8000
-	16000
-*/
-template <class T> static long long time_data_structure(size_t size)
+template <class T> static double long time_data_structure(size_t size)
 {
 	T s;
-	long long avg = 0;
+	double long avg = 0;
 	for (int i = 0; i < 100; ++i)
 	{
 		unsigned long long const start = current_millis();
@@ -35,13 +27,13 @@ template <class T> static long long time_data_structure(size_t size)
 		unsigned long long const end = current_millis();
 		avg += end - start;
 	}
-	return (avg/100);
+	return (avg/100.0);
 }
 
 int main()
 {
 	std::cout.setf(std::ios::unitbuf);
-	std::cout << "Here's the table of average of time it takes to execute each push operation 100 times\n\n";
+	std::cout << "Here's the table of average of 100 tests running n operation\n\n";
 	std::cout << "n\t\t1000\t\t2000\t\t4000\t\t8000\t\t16000" << std::endl;
 	std::cout << "by one\t\t" << time_data_structure<Stack<int, method::ONE>>(1000) << "\t\t" << time_data_structure<Stack<int, method::ONE>>(2000) << "\t\t" << time_data_structure<Stack<int, method::ONE>>(4000) << "\t\t" << time_data_structure<Stack<int, method::ONE>>(8000) << "\t\t" << time_data_structure<Stack<int, method::ONE>>(16000) << std::endl;
 	std::cout << "by ten\t\t" << time_data_structure<Stack<int, method::TEN>>(1000) << "\t\t" << time_data_structure<Stack<int, method::TEN>>(2000) << "\t\t" << time_data_structure<Stack<int, method::TEN>>(4000) << "\t\t" << time_data_structure<Stack<int, method::TEN>>(8000) << "\t\t" << time_data_structure<Stack<int, method::TEN>>(16000) << std::endl;
