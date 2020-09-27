@@ -71,6 +71,32 @@ TEST(lengthTest, TwoElementsConsAppend) {
 }
 
 //-----------------------------------------------------------------
+// appendTest...depends on toString
+//-----------------------------------------------------------------
+
+TEST(appendTest, AppendtoEmptyList) {
+   LList list;
+   list.append(1);
+   EXPECT_EQ("[" + LList::DELIMITER 
+      + "1" + LList::DELIMITER 
+      + "]", list.toString());
+}
+
+TEST(appendTest, AppendMultipleItems) {
+   LList list;
+   list.append(2);
+   list.append(3);
+   list.append(4);
+   list.append(5);
+   EXPECT_EQ("[" + LList::DELIMITER
+      + "2" + LList::DELIMITER
+      + "3" + LList::DELIMITER
+      + "4" + LList::DELIMITER
+      + "5" + LList::DELIMITER
+      + "]", list.toString());
+}
+
+//-----------------------------------------------------------------
 // searchTest...depends on cons and toString
 //-----------------------------------------------------------------
 TEST(searchTest, EmptyListFail) {
@@ -120,6 +146,14 @@ TEST(lastTest, MoreElementsWithAppend) {
    list.append(7);
    EXPECT_EQ(7, list.last());
 }
+
+//added test
+TEST(lastTest, EmptyListLast) {
+   LList list;
+   EXPECT_EQ(LList::NOT_DEFINED, list.last()) << 
+      errorString("an empty list has an undefined value");
+}
+
 //-----------------------------------------------------------------
 // removeTest...depends on cons and toString 
 // two possible errors: the return value is wrong and/or the element is not removed
