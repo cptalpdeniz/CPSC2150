@@ -15,7 +15,7 @@
 struct SNode
 {
 	SNode* next;
-	SNode* nextLevel;
+	SNode* nextlevel;
 	int data;	
 };
 

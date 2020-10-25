@@ -1,5 +1,16 @@
 // CPSC 2150, Assignment #4, Fall 2017
 // Gladys Monagan
+
+/* 
+Name: Alp Deniz Senyurt
+Student Number: 100342433
+Assignment #4, CPSC 2150
+
+NOTE:
+Self explanatory variables and parameters will not be documented as they are, "self-explanatory".
+
+*/
+
 #include "SList.h"
 #include <cassert>
 #include <iostream>
@@ -7,7 +18,7 @@
 
 
 //UNITTEST HAS ISSUE AS WHETHER A VALUE GOES ON LEVEL 2 IS RANDOM (WITH PROBABILITY COEFFICIENT P)
-//HOWEVER, UNITTEST HAS SET VALUES THAT IT EXPECTS THE PRGORAM TO PRINT WHICH NOT POSSIBLE WHEN PROBABILITY IS INVOLVED.
+//HOWEVER, UNITTEST HAS SET VALUES THAT IT EXPECTS THE PROGRAM TO PRINT WHICH NOT POSSIBLE WHEN SKIP LIST IS NOT A DETERMINISTIC DATA TYPE.
 
 // to have debugging output and asserts, comment out the following statement
 #define NDEBUG
@@ -17,9 +28,8 @@ using std::cerr;
 #endif
 
 const float PROB = 0.5;
-srand(time(NULL));
 
-//
+//Default Constructor
 SList::SList()
 {
 	DEREF_COUNT = 0;
@@ -60,14 +70,14 @@ void SList::insert(int x)
 		head_LEVEL2 = new SNode{nullptr, head_LEVEL_BASE, x};
 		return;
 	}
-	bool ifLevelUp = rand() < (RAND_MAX() * PROB);
+	bool ifLevelUp = rand() < (RAND_MAX * PROB);
 	SNode* temp;
-	SNode* currentNode = x < head_LEVEL2->x ? nullptr : head_LEVEL2;
+	SNode* currentNode = x < head_LEVEL2->data ? nullptr : head_LEVEL2;
 	DEREF_COUNT++;
 	
 	//iterate through level 2
 	//Using comma operator to accurately count dereference operation
-	while (currentNode != nullptr && (++DEREF_COUNT, currentNode->next != nullptr) && (++DEREF_COUNT, x > currentNode->next->x))
+	while (currentNode != nullptr && (++DEREF_COUNT, currentNode->next != nullptr) && (++DEREF_COUNT, x > currentNode->next->data))
 	{
 		currentNode = currentNode->next;
 		++DEREF_COUNT;
@@ -87,7 +97,7 @@ void SList::insert(int x)
 
 	//iterate through base level
 	//Using comma operator again to accurately count dereference operation
-	while (currentNode != nullptr && (++DEREF_COUNT, currentNode->next != nullptr) && (++DEREF_COUNT, x > currentNode->next->x))
+	while (currentNode != nullptr && (++DEREF_COUNT, currentNode->next != nullptr) && (++DEREF_COUNT, x > currentNode->next->data))
 	{
 		currentNode = currentNode->next;
 		++DEREF_COUNT;
@@ -121,21 +131,21 @@ bool SList::search(int x, int& comparisons)
 		return false;
 
 	//search through level2 to fasten the search operation
-	currentNode = head_LEVEL2;
-	while (currentNode->next != nullptr && (++comparisons, x > currentNode->next->x))
+	SNode* currentNode = head_LEVEL2;
+	while (currentNode->next != nullptr && (++comparisons, x > currentNode->next->data))
 	{
 		currentNode = currentNode->next;
 	}
-	if (++comparisons, x == currentNode->x)
+	if (++comparisons, x == currentNode->data)
 		return true;
 
 	//go down 1 level to base level and search linearly through the list
 	currentNode = currentNode->nextlevel;
-	while (currentNode->next != nullptr && (++comparisons, x > currentNode->next->x))
+	while (currentNode->next != nullptr && (++comparisons, x >= currentNode->next->data))
 	{
 		currentNode = currentNode->next;
 	}
-	if (++comparisons, x == currentNode->x)
+	if (++comparisons, x == currentNode->data)
 		return true;
 	
 	return false;
@@ -155,9 +165,7 @@ int SList::numberOfElements() const
 	{
 		++count;
 		temp = temp->next;
-		DEREF_COUNT += 2;
 	}
-	++DEREF_COUNT;
 	return count;
 }
 
@@ -166,6 +174,12 @@ int SList::numberOfElements() const
 // free up the nodes properly and initialize everything
 void SList::reset()
 {
+	if (head_LEVEL_BASE == nullptr && head_LEVEL2 == nullptr)
+	{
+		DEREF_COUNT = 0;
+		return;
+	}
+	//iterate through base level and delete nodes one at a time
 	SNode* temp = head_LEVEL_BASE;
 	SNode* temp2 = head_LEVEL_BASE->next;
 	while (temp->next != nullptr)
@@ -175,6 +189,7 @@ void SList::reset()
 		temp = temp2;
 	}
 	delete temp;
+	//iterate through level 2 and delete nodes one at a time
 	temp = head_LEVEL2;
 	temp2 = head_LEVEL2->next;
 	while (temp->next != nullptr)
@@ -207,7 +222,29 @@ SList& SList::operator = (const SList &rhs)
 		this->reset();
 		delimiter = rhs.delimiter;
 		DEREF_COUNT = rhs.DEREF_COUNT;
-		//ITERATE AND DEEP COPY EVERYTHING
+		
+		//Create temp variables. 4 Variables are needed here as we iterate through 4 lists at a time.
+		SNode* rhsTempBASE = rhs.head_LEVEL_BASE->next;
+		SNode* rhsTemp = rhs.head_LEVEL2->next;
+		this->head_LEVEL_BASE = new SNode{nullptr, nullptr, rhs.head_LEVEL_BASE->data};
+		this->head_LEVEL2 = new SNode{nullptr, nullptr, rhs.head_LEVEL2->data};
+		SNode* currentNodeBASE = this->head_LEVEL_BASE;
+		SNode* currentNode = this->head_LEVEL2;
+		
+		//iterate through rhs base as that is the list to be copied to "this". Note, every node in level 2 exists in base level, however this is not the case in the opposite direction. 
+		//Checks if the node is present in the upper level as well, if it does, adds it to this->level 2.
+		while (rhsTempBASE != nullptr)
+		{
+			currentNodeBASE->next = new SNode{nullptr, nullptr, rhsTempBASE->data};
+			if (rhsTemp->data == rhsTempBASE->data)
+			{
+				currentNode->next = new SNode{nullptr, currentNodeBASE->next, rhsTemp->data};
+				rhsTemp = rhsTemp->next;
+				currentNode = currentNode->next;
+			}
+			rhsTempBASE = rhsTempBASE->next;
+			currentNodeBASE = currentNodeBASE->next;
+		}
 	}
 	return (*this);
 }
@@ -228,19 +265,19 @@ std::ostream& operator << (std::ostream& out, const SList& sList)
 {
 	if (sList.getTopListOutput())
 	{
-		SNode* temp = head_LEVEL2;
+		SNode* temp = sList.head_LEVEL2;
 		while (temp != nullptr)
 		{
-			out << temp->x << delimiter;
+			out << temp->data << sList.delimiter;
 			temp = temp->next;
 		}
 	}
 	else
 	{
-		SNode* temp = head_LEVEL_BASE;
+		SNode* temp = sList.head_LEVEL_BASE;
 		while (temp != nullptr)
 		{
-			out << temp->x << delimiter;
+			out << temp->data << sList.delimiter;
 			temp = temp->next;
 		}
 	}
