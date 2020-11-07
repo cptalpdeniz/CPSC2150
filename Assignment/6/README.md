@@ -21,6 +21,7 @@ All Stack, Queue and Recursive implementation of coloring uses the same algorith
 
 
 ## Line Arguments
+```
 usage: color [-help][-input <path>][-output <path>][-i <value>][-j <value>][-recursive][-queue][-stack]
 
 help				prints the usage
@@ -31,3 +32,4 @@ j <value> 			an integer for the column of the starting pixel (origin in the uppe
 recursive 			calls the recursive version
 queue 				calls the version that uses the queue
 stack 				calls the version of that uses an explicit stack
+```
