@@ -1,3 +1,13 @@
+/* 
+Name: Alp Deniz Senyurt
+Student Number: 100342433
+Assignment #6, CPSC 2150
+
+NOTE:
+Self explanatory variables and parameters will not be documented as they are, "self-explanatory".
+
+*/
+
 usage: color [-help][-input <path>][-output <path>][-i <value>][-j <value>][-recursive][-queue][-stack]
 
 help				prints the usage

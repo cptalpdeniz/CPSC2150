@@ -1,5 +1,12 @@
-// Name:
-// started by Gladys Monagan, CPSC 2150, Assignment #6, 2020
+/* 
+Name: Alp Deniz Senyurt
+Student Number: 100342433
+Assignment #6, CPSC 2150
+
+NOTE:
+Self explanatory variables and parameters will not be documented as they are, "self-explanatory".
+
+*/
 
 #ifndef CANVAS_H
 #define CANVAS_H
