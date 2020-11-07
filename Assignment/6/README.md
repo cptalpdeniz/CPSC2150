@@ -25,8 +25,8 @@ All Stack, Queue and Recursive implementation of coloring uses the same algorith
 usage: color [-help][-input <path>][-output <path>][-i <value>][-j <value>][-recursive][-queue][-stack]
 
 help				prints the usage
-input <path>		the inFile that has two integers the m rows and n columns followed by m by n b characters and r characters
-output <path>		the outFile has m rows by n columns of R characters and blanks
+input <path>			the inFile that has two integers the m rows and n columns followed by m by n b characters and r characters
+output <path>			the outFile has m rows by n columns of R characters and blanks
 i <value> 			an integer for the row of the starting pixel (origin is the upper left hand corner)
 j <value> 			an integer for the column of the starting pixel (origin in the upper left hand corner)
 recursive 			calls the recursive version
